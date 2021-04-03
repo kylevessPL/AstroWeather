@@ -16,6 +16,8 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import pl.piasta.astroweather.R;
+import pl.piasta.astroweather.ui.util.DecimalDigitsInputFilter;
+import pl.piasta.astroweather.ui.util.RangeInputFilter;
 
 public class CoordinatesPreference extends EditTextPreference {
 

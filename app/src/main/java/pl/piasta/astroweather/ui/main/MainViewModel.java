@@ -12,12 +12,15 @@ import java.util.concurrent.Executors;
 
 public class MainViewModel extends ViewModel {
 
-    private final ExecutorService executor = Executors.newFixedThreadPool(2);
+    private final ExecutorService executor;
 
-    private final MutableLiveData<String> mDate = new MutableLiveData<>();
-    private final MutableLiveData<String> mTime = new MutableLiveData<>();
+    private final MutableLiveData<String> mDate;
+    private final MutableLiveData<String> mTime;
 
     public MainViewModel() {
+        this.executor = Executors.newFixedThreadPool(2);
+        this.mDate = new MutableLiveData<>();
+        this.mTime = new MutableLiveData<>();
         refreshCurrentDateTime();
     }
 
@@ -40,5 +43,4 @@ public class MainViewModel extends ViewModel {
         mDate.postValue(dateTime.format(dateFormatter));
         mTime.postValue(dateTime.format(timeFormatter));
     }
-
 }

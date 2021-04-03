@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,22 +17,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.Objects;
+
 import pl.piasta.astroweather.R;
 
 public class MainActivity extends AppCompatActivity {
 
     private MainViewModel model;
-    private BroadcastReceiver broadcastReceiver;
+    private BroadcastReceiver dateTimeBroadcastReceiver;
+    private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
     private TextView time;
     private TextView date;
-    private TextView coordinates;
+    private TextView latitude;
+    private TextView longitude;
     private ImageButton refreshButton;
 
     @Override
@@ -45,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         setAstroTabLayout(pa);
         time = findViewById(R.id.time);
         date = findViewById(R.id.date);
-        coordinates = findViewById(R.id.coordinates);
+        latitude = findViewById(R.id.latitude);
+        longitude = findViewById(R.id.longitude);
         model = new ViewModelProvider(this).get(MainViewModel.class);
         refreshButton = findViewById(R.id.refresh);
         setupListeners();
@@ -59,24 +66,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context ctx, Intent intent) {
-                if (intent.getAction().equals(Intent.ACTION_TIME_TICK)) {
-                    model.updateClock();
-                }
-            }
-        };
-        registerReceiver(broadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+    public void onResume() {
+        super.onResume();
+        registerDateTimeBroadcastReceiver();
+        loadPreferences();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if (broadcastReceiver != null) {
-            unregisterReceiver(broadcastReceiver);
+    public void onPause() {
+        super.onPause();
+        if (dateTimeBroadcastReceiver != null) {
+            unregisterReceiver(dateTimeBroadcastReceiver);
         }
     }
 
@@ -99,8 +99,21 @@ public class MainActivity extends AppCompatActivity {
     private void setAstroTabLayout(ViewPager2 pa) {
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         new TabLayoutMediator(tabLayout, pa, (tab, position) ->
-                tab.setText(((AstroFragmentStateAdapter) pa.getAdapter()).getItemName(position))
+                tab.setText(((AstroFragmentStateAdapter) Objects.requireNonNull(pa.getAdapter()))
+                        .getItemName(position))
         ).attach();
+    }
+
+    private void registerDateTimeBroadcastReceiver() {
+        dateTimeBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context ctx, Intent intent) {
+                if (intent.getAction().equals(Intent.ACTION_TIME_TICK)) {
+                    model.updateClock();
+                }
+            }
+        };
+        registerReceiver(dateTimeBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
     }
 
     private void setupListeners() {
@@ -111,5 +124,18 @@ public class MainActivity extends AppCompatActivity {
     private void observeModel() {
         model.getDate().observe(this, date::setText);
         model.getTime().observe(this, time::setText);
+    }
+
+    private void loadPreferences() {
+        SharedPreferences preferenceManager = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        String latitude = preferenceManager.getString("latitude", "DEFAULT");
+        String longtitide = preferenceManager.getString("longtitude", "DEFAULT");
+        setCoordinates(latitude, longtitide);
+    }
+
+    private void setCoordinates(String latitude, String longtitude) {
+        this.latitude.setText(latitude);
+        this.longitude.setText(longtitude);
     }
 }

@@ -1,4 +1,4 @@
-package pl.piasta.astroweather.ui.settings;
+package pl.piasta.astroweather.ui.util;
 
 import android.text.InputFilter;
 import android.text.Spanned;
