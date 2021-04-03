@@ -12,6 +12,7 @@ import java.util.List;
 import pl.piasta.astroweather.ui.base.BaseFragment;
 
 public class AstroFragmentStateAdapter extends FragmentStateAdapter {
+
     private final List<BaseFragment> mFragmentList;
 
     public AstroFragmentStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
