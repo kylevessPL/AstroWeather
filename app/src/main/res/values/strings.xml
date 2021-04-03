@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AstroWeather</string>
+
+    <string name="title_activity_settings">Ustawienia</string>
+
+    <string name="location_header">Lokalizacja</string>
+    <string name="sync_header">Synchronizacja</string>
+
+    <string name="latitude_title">Szerokość geograficzna</string>
+    <string name="longtitude_title">Długość geograficzna</string>
+
+    <string name="auto_sync_title">Synchronizuj dane automatycznie</string>
+    <string name="sync_frequency_title">Częstotliwość odświeżania</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="synchronize">Synchronize</string>
+</resources>
