@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -32,13 +33,14 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel model;
     private BroadcastReceiver dateTimeBroadcastReceiver;
-    private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
     private TextView time;
     private TextView date;
     private TextView latitude;
     private TextView longitude;
     private ImageButton refreshButton;
+    private CardView card;
+    private ViewPager2 pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +48,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final ViewPager2 pa = findViewById(R.id.pager);
-        setAstroFragmentViewPager(pa);
-        setAstroTabLayout(pa);
+        pager = findViewById(R.id.pager);
+        setAstroFragmentViewPager(pager);
+        setAstroTabLayout(pager);
         time = findViewById(R.id.time);
         date = findViewById(R.id.date);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
         model = new ViewModelProvider(this).get(MainViewModel.class);
         refreshButton = findViewById(R.id.refresh);
+        card = findViewById(R.id.card);
         setupListeners();
         observeModel();
     }
@@ -119,6 +122,14 @@ public class MainActivity extends AppCompatActivity {
     private void setupListeners() {
         Animation rotation = AnimationUtils.loadAnimation(this, R.anim.animation_refresh);
         refreshButton.setOnClickListener(button -> button.startAnimation(rotation));
+        pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                int color = position == 0 ? R.color.yellow_700 : R.color.grey_700;
+                card.setBackgroundColor(getColor(color));
+                super.onPageSelected(position);
+            }
+        });
     }
 
     private void observeModel() {

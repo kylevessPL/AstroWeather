@@ -9,6 +9,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>
 
+    <style name="Theme.AstroWeather.Tab" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@color/lightblue_600</item>
+        <item name="tabIndicatorColor">@color/black</item>
+        <item name="tabTextColor">@color/white</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+    </style>
+
     <style name="Theme.AstroWeather.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

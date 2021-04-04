@@ -6,14 +6,268 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MoonFragment">
 
-    <TextView
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_moon"
+        app:layout_constraintBottom_toTopOf="@id/rise_set_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/moon" />
+
+    <TextView style="?android:attr/listSeparatorTextViewStyle"
+        android:id="@+id/rise_set_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Fragment2"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:text="@string/rise_set_title"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/blue_700"
+        app:layout_constraintBottom_toTopOf="@id/rise_set"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image" />
+
+    <RelativeLayout
+        android:id="@+id/rise_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dip"
+        app:layout_constraintBottom_toTopOf="@id/new_full_moon_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rise_set_title">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/rise_title">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/time_rise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true"
+            tools:ignore="RelativeOverlap">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/set_title">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/time_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+
+            </TextView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView style="?android:attr/listSeparatorTextViewStyle"
+        android:id="@+id/new_full_moon_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_full_moon"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/blue_700"
+        app:layout_constraintBottom_toTopOf="@id/new_full_moon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rise_set" />
+
+    <RelativeLayout
+        android:id="@+id/new_full_moon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dip"
+        app:layout_constraintBottom_toTopOf="@id/moon_phase_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_full_moon_title">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/new_moon">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/date_new_moon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true"
+            tools:ignore="RelativeOverlap">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/full_moon">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/date_full_moon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+
+            </TextView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView style="?android:attr/listSeparatorTextViewStyle"
+        android:id="@+id/moon_phase_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/moon_phase_title"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/blue_700"
+        app:layout_constraintBottom_toTopOf="@id/moon_phase"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_full_moon" />
+
+    <LinearLayout
+        android:id="@+id/moon_phase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dip"
+        app:layout_constraintBottom_toTopOf="@id/lunar_month_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/moon_phase_title">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="@string/value" />
+
+            <TextView
+                android:id="@+id/value_moon_phase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                tools:ignore="RelativeOverlap" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <TextView style="?android:attr/listSeparatorTextViewStyle"
+        android:id="@+id/lunar_month_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lunar_month_title"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/blue_700"
+        app:layout_constraintBottom_toTopOf="@id/lunar_month"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/moon_phase" />
+
+    <LinearLayout
+        android:id="@+id/lunar_month"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dip"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/lunar_month_title">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="@string/date" />
+
+            <TextView
+                android:id="@+id/date_lunar_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                tools:ignore="RelativeOverlap" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
