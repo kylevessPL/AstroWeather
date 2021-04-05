@@ -27,7 +27,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class MainViewModel extends ViewModel {
 
-    private static final char DEGREE_SYMBOL = '\u00B0';
+    private static final char DEGREE_SYMBOL = '\u00b0';
 
     private final ExecutorService mSingleExecutor;
     private final ScheduledExecutorService mScheduledExecutor;
