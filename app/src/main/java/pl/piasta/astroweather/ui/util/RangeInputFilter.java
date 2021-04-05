@@ -22,7 +22,8 @@ public class RangeInputFilter implements InputFilter {
             if (isInRange(mMin, mMax, input)) {
                 return null;
             }
-        } catch (NumberFormatException ignored) { }
+        } catch (NumberFormatException ignored) {
+        }
         return "";
     }
 

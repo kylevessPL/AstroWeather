@@ -17,7 +17,7 @@ public class SunFragment extends BaseFragment {
 
     private static final String FRAGMENT_NAME = "Słońce";
 
-    private MainViewModel model;
+    private MainViewModel mModel;
 
     private TextView mSunRiseTime;
     private TextView mSunRiseAzimuth;
@@ -37,7 +37,7 @@ public class SunFragment extends BaseFragment {
         mSunSetAzimuth = root.findViewById(R.id.azimuth_set);
         mSunDuskTime = root.findViewById(R.id.time_dusk);
         mSunDawnTime = root.findViewById(R.id.time_dawn);
-        model = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        mModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         return root;
     }
 
@@ -54,11 +54,11 @@ public class SunFragment extends BaseFragment {
     }
 
     private void observeModel() {
-        model.getSunRiseTime().observe(getViewLifecycleOwner(), mSunRiseTime::setText);
-        model.getSunRiseAzimuth().observe(getViewLifecycleOwner(), mSunRiseAzimuth::setText);
-        model.getSunSetTime().observe(getViewLifecycleOwner(), mSunSetTime::setText);
-        model.getSunSetAzimuth().observe(getViewLifecycleOwner(), mSunSetAzimuth::setText);
-        model.getSunDuskTime().observe(getViewLifecycleOwner(), mSunDuskTime::setText);
-        model.getSunDawnTime().observe(getViewLifecycleOwner(), mSunDawnTime::setText);
+        mModel.getSunRiseTime().observe(getViewLifecycleOwner(), mSunRiseTime::setText);
+        mModel.getSunRiseAzimuth().observe(getViewLifecycleOwner(), mSunRiseAzimuth::setText);
+        mModel.getSunSetTime().observe(getViewLifecycleOwner(), mSunSetTime::setText);
+        mModel.getSunSetAzimuth().observe(getViewLifecycleOwner(), mSunSetAzimuth::setText);
+        mModel.getSunDuskTime().observe(getViewLifecycleOwner(), mSunDuskTime::setText);
+        mModel.getSunDawnTime().observe(getViewLifecycleOwner(), mSunDawnTime::setText);
     }
 }

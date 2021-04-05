@@ -12,19 +12,19 @@ public enum UpdateInterval {
     HOURS_12(12, TimeUnit.HOURS),
     HOURS_24(24, TimeUnit.HOURS);
 
-    private final int interval;
-    private final TimeUnit unit;
+    private final int mInterval;
+    private final TimeUnit mUnit;
 
     UpdateInterval(int interval, TimeUnit unit) {
-        this.interval = interval;
-        this.unit = unit;
+        this.mInterval = interval;
+        this.mUnit = unit;
     }
 
     public int getInterval() {
-        return interval;
+        return mInterval;
     }
 
     public TimeUnit getUnit() {
-        return unit;
+        return mUnit;
     }
 }

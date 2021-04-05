@@ -17,8 +17,8 @@ public class MoonFragment extends BaseFragment {
 
     private static final String FRAGMENT_NAME = "Księżyc";
 
-    private MainViewModel model;
-    
+    private MainViewModel mModel;
+
     private TextView mMoonRiseTime;
     private TextView mMoonSetTime;
     private TextView mNewMoonDate;
@@ -37,7 +37,7 @@ public class MoonFragment extends BaseFragment {
         mFullMoonDate = root.findViewById(R.id.date_full_moon);
         mMoonPhaseValue = root.findViewById(R.id.value_moon_phase);
         mMoonLunarMonthDay = root.findViewById(R.id.day_lunar_month);
-        model = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        mModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         return root;
     }
 
@@ -54,11 +54,11 @@ public class MoonFragment extends BaseFragment {
     }
 
     private void observeModel() {
-        model.getMoonRiseTime().observe(getViewLifecycleOwner(), mMoonRiseTime::setText);
-        model.getMoonSetTime().observe(getViewLifecycleOwner(), mMoonSetTime::setText);
-        model.getNewMoonDate().observe(getViewLifecycleOwner(), mNewMoonDate::setText);
-        model.getFullMoonDate().observe(getViewLifecycleOwner(), mFullMoonDate::setText);
-        model.getMoonPhaseValue().observe(getViewLifecycleOwner(), mMoonPhaseValue::setText);
-        model.getMoonLunarMonthDay().observe(getViewLifecycleOwner(), mMoonLunarMonthDay::setText);
+        mModel.getMoonRiseTime().observe(getViewLifecycleOwner(), mMoonRiseTime::setText);
+        mModel.getMoonSetTime().observe(getViewLifecycleOwner(), mMoonSetTime::setText);
+        mModel.getNewMoonDate().observe(getViewLifecycleOwner(), mNewMoonDate::setText);
+        mModel.getFullMoonDate().observe(getViewLifecycleOwner(), mFullMoonDate::setText);
+        mModel.getMoonPhaseValue().observe(getViewLifecycleOwner(), mMoonPhaseValue::setText);
+        mModel.getMoonLunarMonthDay().observe(getViewLifecycleOwner(), mMoonLunarMonthDay::setText);
     }
 }

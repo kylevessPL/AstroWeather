@@ -27,8 +27,8 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class MainViewModel extends ViewModel {
 
-    private final ExecutorService singleExecutor;
-    private final ScheduledExecutorService scheduledExecutor;
+    private final ExecutorService mSingleExecutor;
+    private final ScheduledExecutorService mScheduledExecutor;
 
     private final MutableLiveData<String> mDate;
     private final MutableLiveData<String> mTime;
@@ -47,8 +47,8 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<String> mMoonLunarMonthDay;
 
     public MainViewModel() {
-        this.singleExecutor = Executors.newSingleThreadExecutor();
-        this.scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+        this.mSingleExecutor = Executors.newSingleThreadExecutor();
+        this.mScheduledExecutor = Executors.newSingleThreadScheduledExecutor();
         this.mDate = new MutableLiveData<>();
         this.mTime = new MutableLiveData<>();
         this.mLastUpdateCheck = new MutableLiveData<>();
@@ -128,7 +128,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void updateClock() {
-        singleExecutor.execute(() -> {
+        mSingleExecutor.execute(() -> {
             String date = getCurrentDateString();
             String time = getCurrentTimeString();
             mDate.postValue(date);
@@ -137,23 +137,23 @@ public class MainViewModel extends ViewModel {
     }
 
     public void updateData(Double latitude, Double longtitude) {
-        singleExecutor.execute(() -> calculateAstro(latitude, longtitude));
+        mSingleExecutor.execute(() -> calculateAstro(latitude, longtitude));
     }
 
     public void setupDataUpdate(UpdateInterval updateInterval,
                                 Double latitude, Double longtitude) {
-        scheduledExecutor.scheduleWithFixedDelay(() -> {
+        mScheduledExecutor.scheduleWithFixedDelay(() -> {
             calculateAstro(latitude, longtitude);
             setLastUpdateCheckTime();
         }, 0, updateInterval.getInterval(), updateInterval.getUnit());
     }
 
     public void tearDownDataUpdate() {
-        scheduledExecutor.shutdownNow();
+        mScheduledExecutor.shutdownNow();
     }
 
     public void updateLastUpdateCheckTime() {
-        singleExecutor.execute(this::setLastUpdateCheckTime);
+        mSingleExecutor.execute(this::setLastUpdateCheckTime);
     }
 
     private void setCurrentDateTime() {

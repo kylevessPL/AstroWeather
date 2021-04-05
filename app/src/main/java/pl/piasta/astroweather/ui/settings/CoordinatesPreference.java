@@ -58,7 +58,7 @@ public class CoordinatesPreference extends EditTextPreference {
             editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                     InputType.TYPE_NUMBER_FLAG_DECIMAL |
                     InputType.TYPE_NUMBER_FLAG_SIGNED);
-            editText.setFilters(new InputFilter[] {
+            editText.setFilters(new InputFilter[]{
                     new DecimalDigitsInputFilter(
                             mCoordinateType.getIntegerPartDigits(),
                             mCoordinateType.getFractionalPartDigits()),
