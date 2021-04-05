@@ -50,6 +50,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textStyle="bold"
                 android:gravity="start"
                 android:text="@string/rise_title">
 
@@ -75,6 +77,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textStyle="bold"
                 android:gravity="start"
                 android:text="@string/set_title">
 
@@ -125,6 +129,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textStyle="bold"
                 android:gravity="start"
                 android:text="@string/new_moon">
 
@@ -150,6 +156,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textStyle="bold"
                 android:gravity="start"
                 android:text="@string/full_moon">
 
@@ -199,6 +207,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textStyle="bold"
                 android:text="@string/value" />
 
             <TextView
@@ -242,6 +252,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:textStyle="bold"
                 android:text="@string/day" />
 
             <TextView
