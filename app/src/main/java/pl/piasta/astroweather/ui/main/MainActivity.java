@@ -31,33 +31,42 @@ import pl.piasta.astroweather.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String SYNC_FREQUENCY_DEFAULT = "3";
+    public static final String LATITUDE_DEFAULT = "19.450000";
+    public static final String LONGTITUDE_DEFAULT = "52.050000";
+    public static final boolean AUTO_SYNC_DEFAULT = false;
+
     private MainViewModel model;
     private BroadcastReceiver dateTimeBroadcastReceiver;
+    private SharedPreferences mPreferences;
 
-    private TextView time;
-    private TextView date;
-    private TextView latitude;
-    private TextView longitude;
-    private ImageButton refreshButton;
-    private CardView card;
-    private ViewPager2 pager;
+    private TextView mTime;
+    private TextView mDate;
+    private TextView mLastUpdateCheck;
+    private TextView mLatitude;
+    private TextView mLongitude;
+    private ImageButton mRefreshButton;
+    private CardView mCard;
+    private ViewPager2 mPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        pager = findViewById(R.id.pager);
-        setAstroFragmentViewPager(pager);
-        setAstroTabLayout(pager);
-        time = findViewById(R.id.time);
-        date = findViewById(R.id.date);
-        latitude = findViewById(R.id.latitude);
-        longitude = findViewById(R.id.longitude);
+        mPager = findViewById(R.id.pager);
+        setAstroFragmentViewPager(mPager);
+        setAstroTabLayout(mPager);
+        mTime = findViewById(R.id.time);
+        mDate = findViewById(R.id.date);
+        mLatitude = findViewById(R.id.latitude);
+        mLongitude = findViewById(R.id.longitude);
+        mLastUpdateCheck = findViewById(R.id.last_update_check);
         model = new ViewModelProvider(this).get(MainViewModel.class);
-        refreshButton = findViewById(R.id.refresh);
-        card = findViewById(R.id.card);
+        mRefreshButton = findViewById(R.id.refresh);
+        mCard = findViewById(R.id.card);
         setupListeners();
         observeModel();
     }
@@ -73,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         registerDateTimeBroadcastReceiver();
         loadPreferences();
+        setupAutoUpdate();
+        updateData();
+        model.updateLastUpdateCheckTime();
     }
 
     @Override
@@ -81,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         if (dateTimeBroadcastReceiver != null) {
             unregisterReceiver(dateTimeBroadcastReceiver);
         }
+        model.tearDownDataUpdate();
     }
 
     @Override
@@ -119,34 +132,70 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(dateTimeBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
     }
 
+    private void setupAutoUpdate() {
+        boolean autoSync = mPreferences.getBoolean("auto_sync", AUTO_SYNC_DEFAULT);
+        if (autoSync) {
+            String frequency = mPreferences.getString("sync_frequency", SYNC_FREQUENCY_DEFAULT);
+            UpdateInterval updateInterval = UpdateInterval.values()[Integer.parseInt(frequency)];
+            double latitude = Double.parseDouble(mLatitude.getText().toString());
+            double longtitude = Double.parseDouble(mLongitude.getText().toString());
+            model.setupDataUpdate(updateInterval, latitude, longtitude);
+        }
+    }
+
     private void setupListeners() {
-        Animation rotation = AnimationUtils.loadAnimation(this, R.anim.animation_refresh);
-        refreshButton.setOnClickListener(button -> button.startAnimation(rotation));
-        pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        Animation rotation = createRefreshAnimation();
+        mRefreshButton.setOnClickListener(button -> button.startAnimation(rotation));
+        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 int color = position == 0 ? R.color.yellow_700 : R.color.grey_700;
-                card.setBackgroundColor(getColor(color));
+                mCard.setBackgroundColor(getColor(color));
                 super.onPageSelected(position);
             }
         });
     }
 
+    private Animation createRefreshAnimation() {
+        Animation rotation = AnimationUtils.loadAnimation(this, R.anim.animation_refresh);
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                updateData();
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                model.updateLastUpdateCheckTime();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        return rotation;
+    }
+
     private void observeModel() {
-        model.getDate().observe(this, date::setText);
-        model.getTime().observe(this, time::setText);
+        model.getDate().observe(this, mDate::setText);
+        model.getTime().observe(this, mTime::setText);
+        model.getLastUpdateCheck().observe(this, mLastUpdateCheck::setText);
     }
 
     private void loadPreferences() {
-        SharedPreferences preferenceManager = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        String latitude = preferenceManager.getString("latitude", "DEFAULT");
-        String longtitide = preferenceManager.getString("longtitude", "DEFAULT");
+        String latitude = mPreferences.getString("latitude", LATITUDE_DEFAULT);
+        String longtitide = mPreferences.getString("longtitude", LONGTITUDE_DEFAULT);
         setCoordinates(latitude, longtitide);
     }
 
     private void setCoordinates(String latitude, String longtitude) {
-        this.latitude.setText(latitude);
-        this.longitude.setText(longtitude);
+        this.mLatitude.setText(latitude);
+        this.mLongitude.setText(longtitude);
+    }
+
+    private void updateData() {
+        double latitude = Double.parseDouble(mLatitude.getText().toString());
+        double longtitude = Double.parseDouble(mLongitude.getText().toString());
+        model.updateData(latitude, longtitude);
     }
 }

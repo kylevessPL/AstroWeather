@@ -31,4 +31,6 @@
     <string name="value">Wartość</string>
     <string name="lunar_month_title">Miesiąc synodyczny</string>
     <string name="date">Data</string>
+    <string name="day">Dzień</string>
+    <string name="last_update_check">Ostatnie sprawdzenie:</string>
 </resources>

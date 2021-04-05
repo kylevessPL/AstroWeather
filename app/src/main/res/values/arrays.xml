@@ -10,12 +10,12 @@
     </string-array>
 
     <string-array name="sync_frequency_values">
-        <item>15_min</item>
-        <item>30_min</item>
-        <item>1_h</item>
-        <item>2_h</item>
-        <item>5_h</item>
-        <item>12_h</item>
-        <item>24_h</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
     </string-array>
 </resources>

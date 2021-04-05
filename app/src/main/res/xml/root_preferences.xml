@@ -25,11 +25,11 @@
             app:title="@string/auto_sync_title" />
 
         <ListPreference
+            app:defaultValue="3"
             app:dependency="auto_sync"
-            app:key="sync_frequency"
-            app:defaultValue="2_h"
             app:entries="@array/sync_frequency_entries"
             app:entryValues="@array/sync_frequency_values"
+            app:key="sync_frequency"
             app:title="@string/sync_frequency_title"
             app:useSimpleSummaryProvider="true" />
 
