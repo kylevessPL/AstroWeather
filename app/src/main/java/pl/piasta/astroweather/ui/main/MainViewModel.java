@@ -27,6 +27,8 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class MainViewModel extends ViewModel {
 
+    private static final char DEGREE_SYMBOL = '\u00B0';
+
     private final ExecutorService mSingleExecutor;
     private final ScheduledExecutorService mScheduledExecutor;
 
@@ -191,8 +193,8 @@ public class MainViewModel extends ViewModel {
 
     private void setSunInfo(AstroCalculator calculator) {
         SunInfo sunInfo = calculator.getSunInfo();
-        mSunRiseAzimuth.postValue(getDoubleAsString(sunInfo.getAzimuthRise()));
-        mSunSetAzimuth.postValue(getDoubleAsString(sunInfo.getAzimuthSet()));
+        mSunRiseAzimuth.postValue(getDoubleAsString(sunInfo.getAzimuthRise()) + DEGREE_SYMBOL);
+        mSunSetAzimuth.postValue(getDoubleAsString(sunInfo.getAzimuthSet()) + DEGREE_SYMBOL);
         mSunRiseTime.postValue(getAstroDateTimeAsTimeString(sunInfo.getSunrise()));
         mSunSetTime.postValue(getAstroDateTimeAsTimeString(sunInfo.getSunset()));
         mSunDuskTime.postValue(getAstroDateTimeAsTimeString(sunInfo.getTwilightEvening()));
@@ -206,7 +208,7 @@ public class MainViewModel extends ViewModel {
         mNewMoonDate.postValue(getAstroDateTimeAsDateString(moonInfo.getNextNewMoon()));
         mFullMoonDate.postValue(getAstroDateTimeAsDateString(moonInfo.getNextFullMoon()));
         mMoonPhaseValue.postValue(getMoonIlluminationAsPercentValue(moonInfo.getIllumination()));
-        mMoonLunarMonthDay.postValue(String.valueOf(moonInfo.getAge()));
+        mMoonLunarMonthDay.postValue(getMoonLunarMonthDayAsString(moonInfo.getAge()));
     }
 
     private AstroDateTime createAstroDateTime() {
@@ -218,7 +220,7 @@ public class MainViewModel extends ViewModel {
         LocalTime time = LocalTime.parse(mTime.getValue());
         return new AstroDateTime(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
                 time.getHour(), time.getMinute(), time.getSecond(),
-                1, true);
+                2, true);
     }
 
     private String getDoubleAsString(Double value) {
@@ -240,6 +242,12 @@ public class MainViewModel extends ViewModel {
     }
 
     private String getMoonIlluminationAsPercentValue(double value) {
-        return (int) value / 100 + "%";
+        return (int) (value * 100) + "%";
+    }
+
+    private String getMoonLunarMonthDayAsString(double value) {
+        final NumberFormat numberFormat = DecimalFormat.getInstance(Locale.US);
+        numberFormat.setMaximumFractionDigits(2);
+        return numberFormat.format(value / 10);
     }
 }
