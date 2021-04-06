@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mLongitude;
     private ImageButton mRefreshButton;
     private CardView mCard;
-    private ViewPager2 mPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mPager = findViewById(R.id.pager);
-        setAstroFragmentViewPager(mPager);
-        setAstroTabLayout(mPager);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setupPager();
+        }
         mTime = findViewById(R.id.time);
         mDate = findViewById(R.id.date);
         mLatitude = findViewById(R.id.latitude);
@@ -106,6 +106,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setupPager() {
+        ViewPager2 pager = findViewById(R.id.pager);
+        pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                int color = position == 0 ? R.color.yellow_700 : R.color.grey_700;
+                mCard.setBackgroundColor(getColor(color));
+                super.onPageSelected(position);
+            }
+        });
+        setAstroFragmentViewPager(pager);
+        setAstroTabLayout(pager);
+    }
+
     private void setAstroFragmentViewPager(ViewPager2 pa) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentStateAdapter sa = new AstroFragmentStateAdapter(fm, getLifecycle());
@@ -146,14 +160,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupListeners() {
         Animation rotation = createRefreshAnimation();
         mRefreshButton.setOnClickListener(button -> button.startAnimation(rotation));
-        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                int color = position == 0 ? R.color.yellow_700 : R.color.grey_700;
-                mCard.setBackgroundColor(getColor(color));
-                super.onPageSelected(position);
-            }
-        });
     }
 
     private Animation createRefreshAnimation() {
