@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT &&
+                !getResources().getBoolean(R.bool.isTablet)) {
             setupPager();
         }
         mTime = findViewById(R.id.time);

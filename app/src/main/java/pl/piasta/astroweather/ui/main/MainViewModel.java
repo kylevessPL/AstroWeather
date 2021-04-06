@@ -14,11 +14,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
-import java.time.MonthDay;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -212,12 +210,16 @@ public class MainViewModel extends ViewModel {
     }
 
     private AstroDateTime createAstroDateTime() {
-        TemporalAccessor temporal = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).parse(mDate.getValue());
+        TemporalAccessor temporalDate = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).parse(mDate.getValue());
+        TemporalAccessor temporalTime = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).parse(mTime.getValue());
         LocalDate date = LocalDate.of(
-                Year.from(temporal).getValue(),
-                Month.from(temporal).getValue(),
-                MonthDay.from(temporal).getDayOfMonth());
-        LocalTime time = LocalTime.parse(mTime.getValue());
+                temporalDate.get(ChronoField.YEAR),
+                temporalDate.get(ChronoField.MONTH_OF_YEAR),
+                temporalDate.get(ChronoField.DAY_OF_MONTH));
+        LocalTime time = LocalTime.of(
+                temporalTime.get(ChronoField.HOUR_OF_DAY),
+                temporalTime.get(ChronoField.MINUTE_OF_HOUR),
+                temporalTime.get(ChronoField.SECOND_OF_MINUTE));
         return new AstroDateTime(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
                 time.getHour(), time.getMinute(), time.getSecond(),
                 2, true);
