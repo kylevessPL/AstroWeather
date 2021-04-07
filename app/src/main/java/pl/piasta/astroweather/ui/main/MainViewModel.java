@@ -21,14 +21,15 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class MainViewModel extends ViewModel {
 
     private static final char DEGREE_SYMBOL = '\u00b0';
 
     private final ExecutorService mSingleExecutor;
-    private final ScheduledExecutorService mScheduledExecutor;
+    private final ScheduledThreadPoolExecutor mScheduledExecutor;
 
     private final MutableLiveData<String> mDate;
     private final MutableLiveData<String> mTime;
@@ -46,9 +47,12 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<String> mMoonPhaseValue;
     private final MutableLiveData<String> mMoonLunarMonthDay;
 
+    private ScheduledFuture<?> mUpdateTask;
+
     public MainViewModel() {
         this.mSingleExecutor = Executors.newSingleThreadExecutor();
-        this.mScheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+        this.mScheduledExecutor = new ScheduledThreadPoolExecutor(1);
+        this.mScheduledExecutor.setRemoveOnCancelPolicy(true);
         this.mDate = new MutableLiveData<>();
         this.mTime = new MutableLiveData<>();
         this.mLastUpdateCheck = new MutableLiveData<>();
@@ -142,14 +146,17 @@ public class MainViewModel extends ViewModel {
 
     public void setupDataUpdate(UpdateInterval updateInterval,
                                 Double latitude, Double longtitude) {
-        mScheduledExecutor.scheduleWithFixedDelay(() -> {
+        mUpdateTask = mScheduledExecutor.scheduleWithFixedDelay(() -> {
             calculateAstro(latitude, longtitude);
             setLastUpdateCheckTime();
         }, 0, updateInterval.getInterval(), updateInterval.getUnit());
     }
 
     public void tearDownDataUpdate() {
-        mScheduledExecutor.shutdownNow();
+        if (mUpdateTask != null && !mUpdateTask.isCancelled()) {
+            mUpdateTask.cancel(true);
+            mUpdateTask = null;
+        }
     }
 
     public void updateLastUpdateCheckTime() {
