@@ -85,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
         registerDateTimeBroadcastReceiver();
         loadPreferences();
         setupAutoUpdate();
-        updateData();
-        model.updateLastUpdateCheckTime();
     }
 
     @Override
@@ -95,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         if (dateTimeBroadcastReceiver != null) {
             unregisterReceiver(dateTimeBroadcastReceiver);
         }
-        model.tearDownDataUpdate();
     }
 
     @Override
@@ -149,14 +146,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupAutoUpdate() {
+        double latitude = Double.parseDouble(mLatitude.getText().toString());
+        double longtitude = Double.parseDouble(mLongitude.getText().toString());
+        UpdateInterval updateInterval = UpdateInterval.DISABLED;
         boolean autoSync = mPreferences.getBoolean("auto_sync", AUTO_SYNC_DEFAULT);
         if (autoSync) {
             String frequency = mPreferences.getString("sync_frequency", SYNC_FREQUENCY_DEFAULT);
-            UpdateInterval updateInterval = UpdateInterval.values()[Integer.parseInt(frequency)];
-            double latitude = Double.parseDouble(mLatitude.getText().toString());
-            double longtitude = Double.parseDouble(mLongitude.getText().toString());
-            model.setupDataUpdate(updateInterval, latitude, longtitude);
+            updateInterval = UpdateInterval.values()[Integer.parseInt(frequency)];
         }
+        model.setupDataUpdate(updateInterval, latitude, longtitude);
     }
 
     private void setupListeners() {
@@ -204,6 +202,6 @@ public class MainActivity extends AppCompatActivity {
     private void updateData() {
         double latitude = Double.parseDouble(mLatitude.getText().toString());
         double longtitude = Double.parseDouble(mLongitude.getText().toString());
-        model.updateData(latitude, longtitude);
+        model.refreshData(latitude, longtitude);
     }
 }

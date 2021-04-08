@@ -48,6 +48,9 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<String> mMoonLunarMonthDay;
 
     private ScheduledFuture<?> mUpdateTask;
+    private UpdateInterval mUpdateInterval;
+    private double mLatitude;
+    private double mLongtitude;
 
     public MainViewModel() {
         this.mSingleExecutor = Executors.newSingleThreadExecutor();
@@ -140,27 +143,47 @@ public class MainViewModel extends ViewModel {
         });
     }
 
-    public void updateData(Double latitude, Double longtitude) {
+    public void refreshData(Double latitude, Double longtitude) {
         mSingleExecutor.execute(() -> calculateAstro(latitude, longtitude));
     }
 
     public void setupDataUpdate(UpdateInterval updateInterval,
                                 Double latitude, Double longtitude) {
-        mUpdateTask = mScheduledExecutor.scheduleWithFixedDelay(() -> {
-            calculateAstro(latitude, longtitude);
-            setLastUpdateCheckTime();
-        }, 0, updateInterval.getInterval(), updateInterval.getUnit());
-    }
-
-    public void tearDownDataUpdate() {
-        if (mUpdateTask != null && !mUpdateTask.isCancelled()) {
-            mUpdateTask.cancel(true);
-            mUpdateTask = null;
-        }
+        mSingleExecutor.execute(() -> {
+            if (updateInterval.equals(mUpdateInterval) &&
+                    mLatitude == latitude && mLongtitude == longtitude) {
+                return;
+            }
+            tearDownDataUpdate();
+            if ((mLatitude != latitude || mLongtitude != longtitude) &&
+                    updateInterval.equals(UpdateInterval.DISABLED)
+            ) {
+                updateData(latitude, longtitude);
+            } else if (!updateInterval.equals(UpdateInterval.DISABLED)) {
+                mUpdateTask = mScheduledExecutor.scheduleWithFixedDelay(() ->
+                        updateData(latitude, longtitude),
+                        0, updateInterval.getInterval(), updateInterval.getUnit());
+            }
+            mUpdateInterval = updateInterval;
+            mLatitude = latitude;
+            mLongtitude = longtitude;
+        });
     }
 
     public void updateLastUpdateCheckTime() {
         mSingleExecutor.execute(this::setLastUpdateCheckTime);
+    }
+
+    private void updateData(double longtitude, double latitude) {
+        calculateAstro(latitude, longtitude);
+        setLastUpdateCheckTime();
+    }
+
+    private void tearDownDataUpdate() {
+        if (mUpdateTask != null && !mUpdateTask.isCancelled()) {
+            mUpdateTask.cancel(true);
+            mUpdateTask = null;
+        }
     }
 
     private void setCurrentDateTime() {

@@ -10,7 +10,8 @@ public enum UpdateInterval {
     HOURS_2(2, TimeUnit.HOURS),
     HOURS_5(5, TimeUnit.HOURS),
     HOURS_12(12, TimeUnit.HOURS),
-    HOURS_24(24, TimeUnit.HOURS);
+    HOURS_24(24, TimeUnit.HOURS),
+    DISABLED(0, TimeUnit.SECONDS);
 
     private final int mInterval;
     private final TimeUnit mUnit;
