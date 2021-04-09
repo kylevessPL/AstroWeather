@@ -280,6 +280,6 @@ public class MainViewModel extends ViewModel {
     private String getMoonLunarMonthDayAsString(double value) {
         final NumberFormat numberFormat = DecimalFormat.getInstance(Locale.US);
         numberFormat.setMaximumFractionDigits(2);
-        return numberFormat.format(value / 10);
+        return numberFormat.format(value);
     }
 }
