@@ -4,6 +4,7 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,8 +13,9 @@ public class DecimalDigitsInputFilter implements InputFilter {
     private final Pattern mPattern;
 
     public DecimalDigitsInputFilter(int integerPartDigits, int fractionalPartDigits) {
-        mPattern = Pattern.compile("-?[0-9]{0," + (integerPartDigits) + "}+((\\.[0-9]{0," + (fractionalPartDigits)
-                + "})?)||(\\.)?");
+        mPattern = Pattern.compile(String.format(Locale.US,
+                "^[-\\.]?\\d{0,%d}(\\.\\d{0,%d})?$",
+                integerPartDigits, fractionalPartDigits));
     }
 
     @Override
@@ -22,7 +24,7 @@ public class DecimalDigitsInputFilter implements InputFilter {
         String newVal = dest.subSequence(0, dstart).toString() + replacement
                 + dest.subSequence(dend, dest.length()).toString();
         Matcher matcher = mPattern.matcher(newVal);
-        if (matcher.matches()) {
+        if (matcher.matches() || newVal.matches("^[.\\-]{1,2}")) {
             return null;
         }
         if (TextUtils.isEmpty(source)) {

@@ -18,6 +18,9 @@ public class RangeInputFilter implements InputFilter {
         try {
             String newVal = dest.toString().substring(0, dstart) + dest.toString().substring(dend);
             newVal = newVal.substring(0, dstart) + source.toString() + newVal.substring(dstart);
+            if (newVal.matches("^[.\\-]{1,2}")) {
+                return null;
+            }
             double input = Double.parseDouble(newVal);
             if (isInRange(mMin, mMax, input)) {
                 return null;
