@@ -1,6 +1,6 @@
 <resources>
     <string-array name="sync_frequency_entries">
-        <item>15 minut</item>
+        <item>30 sekund</item>
         <item>30 minut</item>
         <item>1 godzina</item>
         <item>2 godziny</item>

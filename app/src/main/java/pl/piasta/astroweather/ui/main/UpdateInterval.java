@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 public enum UpdateInterval {
 
-    MINUTES_15(15, TimeUnit.MINUTES),
+    SECONDS_30(30, TimeUnit.SECONDS),
     MINUTES_30(30, TimeUnit.MINUTES),
     HOURS_1(1, TimeUnit.HOURS),
     HOURS_2(2, TimeUnit.HOURS),
