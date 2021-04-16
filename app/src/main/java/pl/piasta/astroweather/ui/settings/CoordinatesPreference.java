@@ -39,9 +39,6 @@ public class CoordinatesPreference extends EditTextPreference {
 
     @Override
     public void setText(String text) {
-        if (text.matches("^[.\\-]{1,2}")) {
-            text = "0";
-        }
         Double number = Double.parseDouble(text);
         NumberFormat numberFormat = DecimalFormat.getInstance(Locale.US);
         numberFormat.setMinimumFractionDigits(6);
@@ -78,7 +75,8 @@ public class CoordinatesPreference extends EditTextPreference {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            return !((String) newValue).isEmpty();
+            return !(((String) newValue).isEmpty() ||
+                    ((String) newValue).matches("^[.\\-]{1,2}"));
         }
     }
 }
